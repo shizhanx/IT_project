@@ -10,26 +10,22 @@ class Artifact_model extends CI_Model
 
 	public function get_artifacts($type,$value){
 		if ($type=='exact'){
-			$query=$this->db->get_where('artifacts',array('artifact_id'=>$value));
-			return $query->result_array();
+			$this->db->where('artifact_id',$value);
+			$this->db->or_where('name',$value);
+			$query = $this->db->get('artifacts');
 		}elseif ($type=='include') {
 			$this->db->like('name',$value,'both');
 			$this->db->or_like('description',$value,'both');
 			$query = $this->db->get('artifacts');
-			return $query->result_array();
 		}
+		return $query->result_array();
 	}
 
-	public function set_news(){
-		$this->load->helper('url');
-
-		$slug=url_title($this->input->post('title'),'dash',TRUE);
-
+	public function create_artifact(){
 		$data=array(
-			'title'=>$this->input->post('title'),
-			'slug'=>$slug,
-			'text'=>$this->input->post('text')
+			'name'=>$_POST['name'],
+			'description'=>$_POST['description']
 		);
-		return $this->db->insert('news',$data);
+		return $this->db->insert('artifacts',$data);
 	}
 }
