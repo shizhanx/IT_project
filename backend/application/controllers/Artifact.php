@@ -24,6 +24,24 @@ class Artifact extends CI_Controller
 		}
 	}
 
+	public function edit_artifact($id){
+//		$_POST=array('name'=>'banana');
+		$artifact_array=$this->Artifact_model->get_artifacts('exact',$id);
+		if (empty($artifact_array)){
+			$this->error('No such artifact');
+		}else {
+			$artifact=$artifact_array[0];
+			foreach ($artifact as $field => $value) {
+				if ($field != 'artifact_id' && isset($_POST[$field])) {
+					$artifact[$field] = $_POST[$field];
+				}
+			}
+			$this->Artifact_model->edit_artifact($artifact);
+			$data['artifacts']=$artifact;
+			$this->load->view('artifacts',$data);
+		}
+	}
+
 	public function error($msg){
 		$data['error_msg']=$msg;
 		$this->load->view('error',$data);

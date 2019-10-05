@@ -11,12 +11,11 @@ class Artifact_model extends CI_Model
 	public function get_artifacts($type,$value){
 		if ($type=='exact'){
 			$this->db->where('artifact_id',$value);
-			$this->db->or_where('name',$value);
-			$query = $this->db->get('artifacts');
+			$query = $this->db->get('artifact');
 		}elseif ($type=='include') {
 			$this->db->like('name',$value,'both');
 			$this->db->or_like('description',$value,'both');
-			$query = $this->db->get('artifacts');
+			$query = $this->db->get('artifact');
 		}
 		return $query->result_array();
 	}
@@ -26,6 +25,11 @@ class Artifact_model extends CI_Model
 			'name'=>$_POST['name'],
 			'description'=>$_POST['description']
 		);
-		return $this->db->insert('artifacts',$data);
+		return $this->db->insert('artifact',$data);
+	}
+
+	public function edit_artifact($new)
+	{
+		$this->db->replace('artifact', $new);
 	}
 }
