@@ -18,14 +18,13 @@ class Artifact extends CI_Controller
 		$exist=$this->Artifact_model->get_artifacts('exact',$_POST['name']);
 		if (empty($exist)){
 			$this->Artifact_model->create_artifact();
-			$this->get_artifact('exact',$_POST['name']);
+			$this->get_artifact('exact_name',$_POST['name']);
 		}else{
 			$this->error('Artifact already exist');
 		}
 	}
 
 	public function edit_artifact($id){
-//		$_POST=array('name'=>'banana');
 		$artifact_array=$this->Artifact_model->get_artifacts('exact',$id);
 		if (empty($artifact_array)){
 			$this->error('No such artifact');
@@ -40,6 +39,10 @@ class Artifact extends CI_Controller
 			$data['artifacts']=$artifact;
 			$this->load->view('artifacts',$data);
 		}
+	}
+
+	public function delete_artifact($id){
+		$this->Artifact_model->delete_artifact($id);
 	}
 
 	public function error($msg){
