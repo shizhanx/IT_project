@@ -9,22 +9,12 @@ class Objects extends CI_Controller
 		$this->load->model("Objects_model");
 	}
 
-	//required POST fields:
-	//id_name: ONLY WHEN $type='exact' the field name of the 'id' field of the searching object, i.e. user_id
-	public function mysearch($database,$type,$value){
-//		$_POST['id_name']='artifact_id';
-		if ($type=='exact' && !isset($_POST['id_name'])){
-			show_error('Please specify the field name of the id you searching');
-		}
-		$data['data']=$this->Objects_model->mysearch($database,$type,$value);
+	public function mysearch($database,$id_name,$type,$value){
+		$data['data']=$this->Objects_model->mysearch($database,$id_name,$type,$value);
 		$this->load->view('echo',$data);
 	}
 
-	// required POST fields:
-	// name: the value of the field 'name' of the searching object
 	public function mycreate($database){
-//		$_POST['name']='mahiru';
-//		$_POST['description']='koi no makyuu';
 		if (!isset($_POST['name'])){
 			show_error('You must enter a name for this new object');
 		}
@@ -37,21 +27,14 @@ class Objects extends CI_Controller
 		}
 	}
 
-	// required POST fields:
-	// id_name: ONLY WHEN $type='exact' the field name of the 'id' field of the searching object, i.e. user_id
-	public function myedit($database,$id){
-//		$_POST['id_name']='artifact_id';
-//		$_POST['name']='green clock';
-		if (!isset($_POST['id_name'])){
-			show_error('Please specify the field name of the id you searching');
-		}
-		$object_array=$this->Objects_model->mysearch($database,'exact',$id);
+	public function myedit($database,$id_name,$id){
+		$object_array=$this->Objects_model->mysearch($database,$id_name,'exact',$id);
 		if (empty($object_array)){
 			show_error('No such object');
 		}else {
 			$object=$object_array[0];
 			foreach ($object as $field => $value) {
-				if ($field != $_POST['id_name'] && isset($_POST[$field])) {
+				if ($field != $id_name && isset($_POST[$field])) {
 					$object[$field] = $_POST[$field];
 				}
 			}
@@ -61,13 +44,7 @@ class Objects extends CI_Controller
 		}
 	}
 
-	// required POST fields:
-	// id_name: ONLY WHEN $type='exact' the field name of the 'id' field of the searching object, i.e. user_id
-	public function mydelete($database,$id){
-//		$_POST['id_name']='artifact_id';
-		if (!isset($_POST['id_name'])){
-			show_error('Please specify the field name of the id you searching');
-		}
-		$this->Objects_model->mydelete($database,$id);
+	public function mydelete($database,$id_name,$id){
+		$this->Objects_model->mydelete($database,$id_name,$id);
 	}
 }
