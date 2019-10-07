@@ -24,4 +24,8 @@ class Relation_model extends CI_Model
 		$query=$this->db->get_where($database,array($searchBy=>$value));
 		return $query->result_array();
 	}
+
+	public function delete($database,$deleteBy,$value){
+		$this->db->delete($database,array($deleteBy=>$value));
+	}
 }
