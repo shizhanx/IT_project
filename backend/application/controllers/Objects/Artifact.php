@@ -8,7 +8,7 @@ class Artifact extends Objects
 
 	public function search($type, $value)
 	{
-		parent::mysearch($this->database, $this->id_name, $type, $value);
+		parent::mysearch($this->database, $type, $value, $this->id_name);
 	}
 
 	public function create()

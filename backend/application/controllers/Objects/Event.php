@@ -1,10 +1,11 @@
 <?php
 include APPPATH.'controllers/Objects/Objects.php';
 
-class Family extends Objects
+
+class Event extends Objects
 {
-	private $database='family';
-	private $id_name='family_id';
+	private $database='event';
+	private $id_name='event_id';
 
 	public function search($type, $value)
 	{
@@ -13,7 +14,11 @@ class Family extends Objects
 
 	public function create()
 	{
-		parent::mycreate($this->database);
+		if (!isset($_POST['name'])){
+			show_error('You must enter a name for this new object');
+		}
+		$id=$this->Objects_model->mycreate($this->database);
+		$this->search('exact',$id);
 	}
 
 	public function edit($id)

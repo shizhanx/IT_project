@@ -8,7 +8,7 @@ class Objects_model extends CI_Model
 		$this->load->database();
 	}
 
-	public function mysearch($database,$id_name,$type,$value){
+	public function mysearch($database,$type,$value,$id_name){
 		if ($type=='exact') {
 			$this->db->where($id_name, $value);
 			$query = $this->db->get($database);
