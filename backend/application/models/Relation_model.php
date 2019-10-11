@@ -8,24 +8,23 @@ class Relation_model extends CI_Model
 		$this->load->database();
 	}
 
-	public function add_relation($database){
-		$fields=$this->db->list_fields($database);
-		foreach ($fields as $field){
-			if (!isset($_POST[$field])){
-				return FALSE;
-			}else{
-				$data[$field]=$_POST[$field];
-			}
-		}
-		return $this->db->insert($database,$data);
-	}
-
-	public function search($database,$searchBy,$value){
-		$query=$this->db->get_where($database,array($searchBy=>$value));
+	public function search($database,$info){
+		$query=$this->db->get_where($database,$info);
 		return $query->result_array();
 	}
 
-	public function delete($database,$deleteBy,$value){
-		$this->db->delete($database,array($deleteBy=>$value));
+	public function create($database,$info){
+		$existing=$this->search($database,$info);
+		if (empty($existing)) {
+			return $this->db->insert($database, $info);
+		}
+	}
+
+	public function edit($database,$new){
+		$this->db->replace($database,$new);
+	}
+
+	public function delete($database,$info){
+		$this->db->delete($database,$info);
 	}
 }

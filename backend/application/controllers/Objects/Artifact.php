@@ -20,8 +20,8 @@ class Artifact extends Objects
 		parent::myedit($this->database);
 	}
 
-	public function delete()
+	public function delete($name)
 	{
-		parent::mydelete($this->database);
+		parent::mydelete($this->database,$name);
 	}
 }
