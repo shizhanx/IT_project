@@ -4,11 +4,10 @@ include APPPATH.'controllers/Objects/Objects.php';
 class Family extends Objects
 {
 	private $database='family';
-	private $id_name='family_id';
 
 	public function search($type, $value)
 	{
-		parent::mysearch($this->database, $type, $value, $this->id_name);
+		parent::mysearch($this->database, $type, $value);
 	}
 
 	public function create()
@@ -16,13 +15,13 @@ class Family extends Objects
 		parent::mycreate($this->database);
 	}
 
-	public function edit($id)
+	public function edit()
 	{
-		parent::myedit($this->database, $this->id_name, $id);
+		parent::myedit($this->database);
 	}
 
-	public function delete($id)
+	public function delete()
 	{
-		parent::mydelete($this->database, $this->id_name, $id);
+		parent::mydelete($this->database);
 	}
 }
