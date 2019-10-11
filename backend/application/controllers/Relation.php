@@ -9,14 +9,26 @@ class Relation extends CI_Controller
 		$this->load->model("Relation_model");
 	}
 
-	public function add_relation($database){
-		if(!$this->Relation_model->add_relation($database)){
-			show_error('No enough information POSTed');
+	public function search($database,$info){
+		return $this->Relation_model->search($database,$info);
+	}
+
+	public function create($database,$info){
+		$this->Relation_model->create($database,$info);
+	}
+
+	public function edit($database,$known_info,$new_field,$new_value){
+		$result_array=$this->search($database,$known_info);
+		$this->delete($database,$known_info);
+		foreach ($result_array as $key=>$value){
+			$result_array[$key][$new_field]=$new_value;
+		}
+		foreach ($result_array as $info) {
+			$this->create($database,$info);
 		}
 	}
 
-	public function search($database,$searchBy,$value){
-		$data['data']=$this->Relation_model->search($database,$searchBy,$value);
-		$this->load->view('echo',$data);
+	public function delete($database,$info){
+		$this->Relation_model->delete($database,$info);
 	}
 }

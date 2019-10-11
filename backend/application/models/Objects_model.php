@@ -35,7 +35,7 @@ class Objects_model extends CI_Model
 		return $this->db->replace($database, $new);
 	}
 
-	public function mydelete($database){
-		$this->db->delete($database,array('name'=>$_POST['name']));
+	public function mydelete($database,$name){
+		$this->db->delete($database,array('name'=>$name));
 	}
 }

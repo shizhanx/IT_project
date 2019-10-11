@@ -1,13 +1,16 @@
 <?php
-
+include APPPATH.'controllers/Relation.php';
 
 class Objects extends CI_Controller
 {
+	protected $relation;
+
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model("Objects_model");
 		$this->load->library('unit_test');
+		$this->relation=new Relation();
 	}
 
 	public function mysearch($database,$type,$value){
@@ -45,12 +48,17 @@ class Objects extends CI_Controller
 	public function myedit($database){
 		if (!isset($_POST['name'])){
 			show_error('You must enter a name for this new object');
+		}elseif (!isset($_POST['old_name'])){
+			show_error('You must set the original name of this new object');
 		}
-		$object_array=$this->Objects_model->mysearch($database,'exact',$_POST['name']);
-		if (empty($object_array)){
+		$old_name_result_array=$this->Objects_model->mysearch($database,'exact',$_POST['old_name']);
+		$new_name_result_array=$this->Objects_model->mysearch($database,'exact',$_POST['name']);
+		if (empty($old_name_result_array)){
 			show_error('No such object');
+		}elseif ($_POST['old_name']!=$_POST['name'] && !empty($new_name_result_array)){
+			show_error('New name already registered');
 		}else {
-			$object=$object_array[0];
+			$object=$old_name_result_array[0];
 			foreach ($object as $field => $value) {
 				if (isset($_POST[$field])) {
 					$object[$field] = $_POST[$field];
@@ -59,6 +67,9 @@ class Objects extends CI_Controller
 			$this->Objects_model->myedit($database,$object);
 			$data['data']=$object;
 			$this->load->view('echo',$data);
+			if ($_POST['old_name']!=$_POST['name']){
+				$this->mydelete($database,$_POST['old_name']);
+			}
 			return $this->mysearch($database,'exact',$_POST['name']);
 		}
 	}
@@ -76,12 +87,9 @@ class Objects extends CI_Controller
 		return true;
 	}
 
-	public function mydelete($database){
-		if (!isset($_POST['name'])){
-			show_error('You must enter a name for this new object');
-		}
-		$this->Objects_model->mydelete($database);
-		$result_array=$this->mysearch($database,'exact',$_POST['name']);
+	public function mydelete($database,$name){
+		$this->Objects_model->mydelete($database,$name);
+		$result_array=$this->mysearch($database,'exact',$name);
 		return empty($result_array);
 	}
 
