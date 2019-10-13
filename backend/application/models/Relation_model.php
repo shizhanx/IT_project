@@ -13,6 +13,18 @@ class Relation_model extends CI_Model
 		return $query->result_array();
 	}
 
+	public function mycreate($database){
+		$fields=$this->db->list_fields($database);
+		foreach ($fields as $field){
+			if (isset($_POST[$field])){
+				$data[$field]=$_POST[$field];
+			}else{
+				show_error('no enough information POSTed');
+			}
+		}
+		return $this->db->insert($database,$data);
+	}
+
 	public function create($database,$info){
 		$existing=$this->search($database,$info);
 		if (empty($existing)) {

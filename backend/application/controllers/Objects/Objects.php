@@ -34,14 +34,14 @@ class Objects extends CI_Controller
 	 * return: an array of one element: the created object. Or an empty array if failed.
 	 */
 	public function mycreate($database){
+		$_POST['search']=$_POST['name'];
 		if (!isset($_POST['name'])){
 			show_error('You must enter a name for this new object');
 		}
 		//see if there's already an object with this name.
-		$result=$this->Objects_model->mysearch($database,'exact',$_POST['name']);
+		$result=$this->Objects_model->mysearch($database,'exact');
 		if (empty($result)){
 			$this->Objects_model->mycreate($database);
-			$_POST['search']=$_POST['name'];
 			return $this->mysearch($database,'exact');
 		}else{
 			show_error('Object already exist');
@@ -63,8 +63,10 @@ class Objects extends CI_Controller
 			show_error('You must set the original name of this new object');
 		}
 		//to check whether the editing object exists. If editing the name, check whether new name already exists.
-		$old_name_result_array=$this->Objects_model->mysearch($database,'exact',$_POST['old_name']);
-		$new_name_result_array=$this->Objects_model->mysearch($database,'exact',$_POST['name']);
+		$_POST['search']=$_POST['old_name'];
+		$old_name_result_array=$this->Objects_model->mysearch($database,'exact');
+		$_POST['search']=$_POST['old_name'];
+		$new_name_result_array=$this->Objects_model->mysearch($database,'exact');
 		if (empty($old_name_result_array)){
 			show_error('No such object');
 		}elseif ($_POST['old_name']!=$_POST['name'] && !empty($new_name_result_array)){
