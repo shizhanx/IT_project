@@ -8,13 +8,13 @@ class Objects_model extends CI_Model
 		$this->load->database();
 	}
 
-	public function mysearch($database,$type,$value){
+	public function mysearch($database,$type){
 		if ($type=='exact'){
-			$this->db->where('name', $value);
+			$this->db->where('name', $_POST['search']);
 			$query = $this->db->get($database);
 		}elseif ($type=='include') {
-			$this->db->like('name',$value,'both');
-			$this->db->or_like('description',$value,'both');
+			$this->db->like('name',$_POST['search'],'both');
+			$this->db->or_like('description',$_POST['search'],'both');
 			$query = $this->db->get($database);
 		}
 		return $query->result_array();
@@ -35,7 +35,7 @@ class Objects_model extends CI_Model
 		return $this->db->replace($database, $new);
 	}
 
-	public function mydelete($database,$name){
-		$this->db->delete($database,array('name'=>$name));
+	public function mydelete($database){
+		$this->db->delete($database,array('name'=>$_POST['name']));
 	}
 }

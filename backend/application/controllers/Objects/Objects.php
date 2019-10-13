@@ -13,44 +13,56 @@ class Objects extends CI_Controller
 		$this->relation=new Relation();
 	}
 
-	public function mysearch($database,$type,$value){
-		$data['data']=$this->Objects_model->mysearch($database,$type,$value);
+	/*
+	 * Expected input:
+	 * $database: the name of the table you want to search in
+	 * $type: 'exact' for exact name match or 'include' for value included in either name or description
+	 * $_POST['search']: the string you want to search for
+	 * return: an array of matching records, can be empty if not found.
+	 */
+	public function mysearch($database,$type){
+		$data['data']=$this->Objects_model->mysearch($database,$type);
 		$this->load->view('echo',$data);
 		return $data['data'];
 	}
 
+	/*
+	 * Expected input:
+	 * $database: the name of the table you want to create in
+	 * $_POST['name']: the name of the object. Required!
+	 * $_POST[other fields]: other fields in this object
+	 * return: an array of one element: the created object. Or an empty array if failed.
+	 */
 	public function mycreate($database){
 		if (!isset($_POST['name'])){
 			show_error('You must enter a name for this new object');
 		}
+		//see if there's already an object with this name.
 		$result=$this->Objects_model->mysearch($database,'exact',$_POST['name']);
 		if (empty($result)){
 			$this->Objects_model->mycreate($database);
-			return $this->mysearch($database,'exact',$_POST['name']);
+			$_POST['search']=$_POST['name'];
+			return $this->mysearch($database,'exact');
 		}else{
 			show_error('Object already exist');
 		}
 	}
 
-	public function test_create($database){
-		$result_array=$this->mycreate($database);
-		if (count($result_array)==0){
-			return false;
-		}
-		foreach ($result_array[0] as $key=>$value){
-			if (isset($_POST[$key]) && $_POST[$key]!=$value){
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public function myedit($database){
+	/*
+	 * Expected input:
+	 * $database: the name of the table you want to create in
+	 * $_POST['old_name']: the original name of the object you want to edit
+	 * $_POST['name']: the name of the object after you edit. If not editing name, should be same as old_name
+	 * $_POST['other fields']
+	 * return: a one-element array of the object after editing.
+	 */
+	public function myedit($database,$related_table){
 		if (!isset($_POST['name'])){
 			show_error('You must enter a name for this new object');
 		}elseif (!isset($_POST['old_name'])){
 			show_error('You must set the original name of this new object');
 		}
+		//to check whether the editing object exists. If editing the name, check whether new name already exists.
 		$old_name_result_array=$this->Objects_model->mysearch($database,'exact',$_POST['old_name']);
 		$new_name_result_array=$this->Objects_model->mysearch($database,'exact',$_POST['name']);
 		if (empty($old_name_result_array)){
@@ -58,6 +70,7 @@ class Objects extends CI_Controller
 		}elseif ($_POST['old_name']!=$_POST['name'] && !empty($new_name_result_array)){
 			show_error('New name already registered');
 		}else {
+			//edit each field in the object according to data POSTed
 			$object=$old_name_result_array[0];
 			foreach ($object as $field => $value) {
 				if (isset($_POST[$field])) {
@@ -67,39 +80,40 @@ class Objects extends CI_Controller
 			$this->Objects_model->myedit($database,$object);
 			$data['data']=$object;
 			$this->load->view('echo',$data);
+			//if editing name, the old object needs to be deleted manually since name is
+			// the primary key. Then edit all the relations accordingly
 			if ($_POST['old_name']!=$_POST['name']){
-				$this->mydelete($database,$_POST['old_name']);
+				//mydelete requires $_POST['name'] to be the deleting object's name
+				$temp=$_POST['name'];
+				$_POST['name']=$_POST['old_name'];
+				$this->mydelete($database);
+				$_POST['name']=$temp;
+				foreach ($related_table as $field=>$table_name){
+					$this->relation->edit($table_name,
+						array($database=>$_POST['old_name']),$database,$_POST['name']);
+				}
 			}
-			return $this->mysearch($database,'exact',$_POST['name']);
+			$_POST['search']=$_POST['name'];
+			return $this->mysearch($database,'exact');
 		}
 	}
 
-	public function test_edit($database){
-		$result_array=$this->myedit($database);
-		if (count($result_array)==0){
-			return false;
+	/*
+	 * Expected input:
+	 * $database: the name of the table you want to delete in
+	 * $_POST['name']: the name of the object. Required!
+	 */
+	public function mydelete($database,$related_table){
+		if (!isset($_POST['name'])){
+			show_error('You must enter a name for this new object');
 		}
-		foreach ($result_array[0] as $key=>$value){
-			if (isset($_POST[$key]) && $_POST[$key]!=$value){
-				return false;
-			}
+		$this->Objects_model->mydelete($database);
+		foreach ($related_table as $field=>$table_name){
+			$this->relation->delete($table_name,array($database=>$_POST['name']));
 		}
-		return true;
-	}
-
-	public function mydelete($database,$name){
-		$this->Objects_model->mydelete($database,$name);
-		$result_array=$this->mysearch($database,'exact',$name);
-		return empty($result_array);
 	}
 
 	public function testall($database){
-		$_POST['name']='clock';
-		$_POST['description']='tsuyusaki mahiru';
-		$this->unit->run($this->test_create($database),true,'create');
-		$_POST['description']='iwada haruki';
-		$this->unit->run($this->test_edit($database),true,'edit');
-		$this->unit->run($this->mydelete($database),true,'delete');
 		echo $this->unit->report();
 	}
 }

@@ -4,42 +4,34 @@ include APPPATH.'controllers/Objects/Objects.php';
 class Family extends Objects
 {
 	private $database='family';
-	private $relations=array('user'=>'userfamily');
+	private $related_table=array('user'=>'userfamily','event'=>'eventfamily');
 
-	public function search($type, $value)
+	public function search($type)
 	{
-		parent::mysearch($this->database, $type, $value);
+		$_POST['search']='starlight 99';
+		parent::mysearch($this->database, $type);
 	}
 
-	public function create($current_user)
+	/*
+	 * auto generates relations according to current user's name
+	 * additional input:
+	 * $_POST['current_user']: the name of the user logged in now
+	 */
+	public function create()
 	{
-//		$_POST['name']='99';
-//		$_POST['description']='starlight';
-		$related='user';
 		parent::mycreate($this->database);
-		$info[$related]=$current_user;
+		$info['user']=$_POST['current_user'];
 		$info[$this->database]=$_POST['name'];
-		$this->relation->create($this->relations[$related],$info);
+		$this->relation->create($this->related_table['user'],$info);
 	}
 
 	public function edit()
 	{
-		$_POST['old_name']='99';
-		$_POST['name']='wife';
-		parent::myedit($this->database);
-		if ($_POST['old_name']!=$_POST['name']){
-			foreach ($this->relations as $related=>$relation_database){
-				$this->relation->edit($relation_database,
-					array($this->database=>$_POST['old_name']),$this->database,$_POST['name']);
-			}
-		}
+		parent::myedit($this->database,$this->related_table);
 	}
 
-	public function delete($name)
+	public function delete()
 	{
-		parent::mydelete($this->database,$name);
-		foreach ($this->relations as $related=>$relation_database){
-			$this->relation->delete($relation_database,array($this->database=>$name));
-		}
+		parent::mydelete($this->database,$this->related_table);
 	}
 }
