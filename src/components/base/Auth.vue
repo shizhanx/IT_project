@@ -10,8 +10,8 @@
             round
           ></ImageView>
         </div>
-        <div class="auth-text">登录Aqour家族</div>
-        <div class="auth-strong-text">家人关系近近近</div>
+        <div class="auth-strong-text">登录{{current_family}}</div>
+        <div class="auth-text">{{description}}</div>
       </div>
       <button
         class="auth-btn"
@@ -37,6 +37,7 @@
 
 <script>
   import ImageView from '../base/ImageView'
+  import {getStorageSync} from '../../api/wechat'
 
   export default {
     components: {
@@ -44,7 +45,9 @@
     },
     data() {
       return {
-        platform: mpvuePlatform
+        platform: mpvuePlatform,
+        current_family: getStorageSync('current_family'),
+        description: getStorageSync('family_description')
       }
     },
     methods: {

@@ -14,7 +14,7 @@
     <div v-if="exist === '0'">
       <van-divider contentPosition="left">文字描述</van-divider>
       <form class="form-container">
-        <input type="text" class="form-control" v-model.lazy="name" placeholder="v-model"/>
+        <input type="text" class="form-control" v-model.lazy="name" placeholder="请输入用户名"/>
       </form>
       <van-divider contentPosition="left">上传图片 最多一张喔~~</van-divider>
       <van-button plain icon="completed" type="primary" @click="onClickSubmit">提交</van-button>
@@ -76,7 +76,18 @@
       },
       onClickFamily(family) {
         setStorageSync('current_family', family)
-        this.$router.push({path: '/pages/familyTree/main'})
+        this.$httpWX.post({
+          url: 'objects/family/search/exact',
+          data: {
+            search: family
+          }
+        }).then(res => {
+          setStorageSync('family_description', res[0]['description'])
+        })
+        // this.$router.replace({path: '/pages/index/main'})
+        wx.switchTab({
+          url: '/pages/index/main'
+        })
       }
     }
   }

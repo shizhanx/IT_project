@@ -2,20 +2,20 @@
   <div>
     <van-divider contentPosition="left">文字描述</van-divider>
     <form class="form-container">
-      <input type="text" class="form-control" v-model.lazy="name" placeholder="v-model.lazy" @change="onChange"/>
-      <input type="text" class="form-control" v-model.lazy="description" placeholder="v-model.lazy" @change="onChange"/>
+      <input type="text" class="form-control" v-model.lazy="name" placeholder="取个名吧！" />
+      <input type="text" class="form-control" v-model.lazy="description" placeholder="介绍一下" />
     </form>
     <p>名字: {{ name }}</p>
     <p>介绍: {{ description }}</p>
     <van-divider contentPosition="left">上传图片 最多一张喔~~</van-divider>
     <Upload ref="ch"/>
-    <van-button plain icon="completed" type="primary" @click="getChild">提交</van-button>
+    <van-button plain icon="completed" type="primary" @click="onClickSubmit">提交</van-button>
   </div>
 </template>
 
 <script>
   import Upload from '../../components/base/Upload'
-  import Toast from 'vant-weapp/dist/toast/toast'
+  // import {getStorageSync} from '../../api/wechat'
 
   export default {
     components: {
@@ -23,37 +23,32 @@
     },
     data () {
       return {
-        name: '取个名吧！',
-        description: '说明一下！'
+        name: '',
+        description: ''
       }
     },
     methods: {
-      onChange(event) {
-        // event.detail 为当前输入的值
-        console.log(event.detail)
-      },
-      getChild() {
-        wx.request({
-          url: 'http://localhost/ci/index.php/objects/artifact/create',
-          data: {
-            'name': this.name,
-            'description': this.description,
-            'current_user': '???'
-          },
-          method: 'POST',
-          header: {
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          success: function (res) {
-            if (res.data[0]['error']) {
-              Toast.fail(res.data[0]['error'])
-            }
-          }
+      onClickSubmit() {
+        // let chil = this.$refs.ch
+        // this.$httpWX.post({
+        //   url: 'objects/artifact/create',
+        //   data: {
+        //     name: this.name,
+        //     description: this.description,
+        //     image: chil.urls,
+        //     current_user: getStorageSync('current_user')
+        //   }
+        // }).then(res => {
+        //   if (res[0]) {
+        //     wx.switchTab({
+        //       url: '/pages/artifact/main'
+        //     })
+        //     wx.showToast({title: '创建成功', icon: 'none'})
+        //   }
+        // })
+        wx.switchTab({
+          url: '/pages/artifact/main'
         })
-        let chil = this.$refs.ch
-        console.log(chil.urls)
-        console.log(this.name)
-        console.log(this.description)
       }
     }
   }

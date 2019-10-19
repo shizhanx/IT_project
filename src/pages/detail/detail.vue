@@ -53,8 +53,8 @@
     },
     methods: {
       toDetail () {
-        wx.navigateTo({
-          url: '/pages/userInput/main'
+        wx.switchTab({
+          url: '/pages/index/main'
         })
       }
     },

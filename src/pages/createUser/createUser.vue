@@ -2,8 +2,8 @@
   <div>
     <van-divider contentPosition="left">文字描述</van-divider>
     <form class="form-container">
-      <input type="text" class="form-control" v-model.lazy="name" placeholder="v-model"/>
-      <input type="text" class="form-control" v-model.lazy="description" placeholder="v-model"/>
+      <input type="text" class="form-control" v-model.lazy="name" placeholder="请输入用户名"/>
+      <input type="text" class="form-control" v-model.lazy="description" placeholder="来！说上一句话！"/>
     </form>
     <van-divider contentPosition="left">上传图片 最多一张喔~~</van-divider>
     <van-button plain icon="completed" type="primary" @click="onClickSubmit">注册</van-button>

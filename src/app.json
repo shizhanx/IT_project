@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/artifact/main",
     "pages/login/main",
     "pages/index/main",
     "pages/calendar/main",
@@ -8,7 +9,6 @@
     "pages/familyTree/main",
     "pages/userInput/main",
     "pages/userInfo/main",
-    "pages/artifact/main",
     "pages/addArtifact/main",
     "pages/addMember/main",
     "pages/weather/main",
