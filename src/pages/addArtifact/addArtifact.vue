@@ -15,7 +15,7 @@
 
 <script>
   import Upload from '../../components/base/Upload'
-  // import {getStorageSync} from '../../api/wechat'
+  import {getStorageSync} from '../../api/wechat'
 
   export default {
     components: {
@@ -29,25 +29,22 @@
     },
     methods: {
       onClickSubmit() {
-        // let chil = this.$refs.ch
-        // this.$httpWX.post({
-        //   url: 'objects/artifact/create',
-        //   data: {
-        //     name: this.name,
-        //     description: this.description,
-        //     image: chil.urls,
-        //     current_user: getStorageSync('current_user')
-        //   }
-        // }).then(res => {
-        //   if (res[0]) {
-        //     wx.switchTab({
-        //       url: '/pages/artifact/main'
-        //     })
-        //     wx.showToast({title: '创建成功', icon: 'none'})
-        //   }
-        // })
-        wx.switchTab({
-          url: '/pages/artifact/main'
+        let chil = this.$refs.ch
+        this.$httpWX.post({
+          url: 'objects/artifact/create',
+          data: {
+            name: this.name,
+            description: this.description,
+            image: chil.urls,
+            current_user: getStorageSync('current_user')
+          }
+        }).then(res => {
+          if (res[0]) {
+            wx.switchTab({
+              url: '/pages/artifact/main'
+            })
+            wx.showToast({title: '创建成功', icon: 'none'})
+          }
         })
       }
     }

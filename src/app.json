@@ -1,12 +1,12 @@
 {
   "pages": [
-    "pages/artifact/main",
+    "pages/familyTree/main",
     "pages/login/main",
     "pages/index/main",
     "pages/calendar/main",
     "pages/detail/main",
+    "pages/artifact/main",
     "pages/userPage/main",
-    "pages/familyTree/main",
     "pages/userInput/main",
     "pages/userInfo/main",
     "pages/addArtifact/main",

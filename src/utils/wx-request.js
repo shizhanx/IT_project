@@ -15,6 +15,7 @@ function request (url, method, data, header = {}) {
       success: function (res) {
         wx.hideLoading()
         if (Number(res.statusCode) === 438) {
+          console.log(res.data['message'])
           wx.showToast({ title: res.data['message'], icon: 'none' })
         } else if (Number(res.statusCode) !== 200) {
           wx.showToast({ title: '通讯错误，稍后再试', icon: 'none' })

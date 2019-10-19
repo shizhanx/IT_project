@@ -3,39 +3,32 @@
     <div class="listContainer">
       <swiper indicator-dots indicator-color="pink" indicator-active-color="green">
         <swiper-item>
-          <img @tap="tetail" src="/static/images/11.jpg" alt="">
+          <img src="/static/images/11.jpg" alt="">
         </swiper-item>
         <swiper-item>
-          <img @tap="tetail" src="/static/images/12.jpg" alt="">
+          <img src="/static/images/12.jpg" alt="">
         </swiper-item>
         <swiper-item>
           <img src="/static/images/13.jpg" alt="">
         </swiper-item>
       </swiper>
     </div>
-    <div  @tap="tetail">
-      超级无敌棒！！！
-      超级无敌棒！！！
+    <div>
+      {{family_description}}
     </div>
     <van-divider />
-    <van-sidebar :active="active" @change="onChange">
-      <van-sidebar-item title="高祖辈" @click="gudo"/>
-      <van-sidebar-item title="曾祖辈" />
-      <van-sidebar-item title="祖辈" />
-      <van-sidebar-item title="父辈" />
-      <van-sidebar-item title="同辈" />
-      <van-sidebar-item title="子辈" />
-      <van-sidebar-item title="孙辈" />
-      <van-sidebar-item title="曾孙辈" />
+    <van-sidebar :active="active">
+      <van-sidebar-item title="祖辈" @click="onClickGeneration(2)"/>
+      <van-sidebar-item title="父辈" @click="onClickGeneration(1)"/>
+      <van-sidebar-item title="同辈" @click="onClickGeneration(0)"/>
+      <van-sidebar-item title="子辈" @click="onClickGeneration(-1)"/>
+      <van-sidebar-item title="孙辈" @click="onClickGeneration(-2)"/>
     </van-sidebar>
     <div class="renwu">
-      <van-grid>
-        <van-grid-item icon="user-o" text="爷爷" />
-        <van-grid-item icon="user-o" text="奶奶" />
-        <van-grid-item icon="user-o" text="外公" />
-        <van-grid-item icon="user-o" text="外婆" />
-        <van-grid-item icon="user-o" text="叔祖父" />
-        <van-grid-item icon="user-o" text="祖姑父" />
+      <van-grid :gutter="30" :column-num="2">
+        <van-grid-item
+          v-for="(user,i) in users" :key="i"
+          icon="user-o" :text=user.title @click="onClickUser(user.user2)"/>
       </van-grid>
     </div>
     <div class="add">
@@ -45,30 +38,44 @@
 </template>
 
 <script>
+  import {getStorageSync} from '../../api/wechat'
+
   export default {
-    Page() {
+    data() {
       return {
-        active: 0
+        active: 0,
+        family_description: getStorageSync('family_description'),
+        users: {}
       }
     },
     methods: {
-      onChange(event) {
-        wx.showToast({
-          icon: 'none',
-          title: `切换至第${event.detail}项`
-        })
-      },
-      tetail () {
-        wx.navigateTo({
-          url: '/pages/userPage/main'
-        })
-      },
-      gudo() {
-        console.log()
-      },
       toAddMemberClick() {
         this.$router.push({path: '/pages/addMember/main'})
+      },
+      onClickUser(name) {
+      },
+      onClickGeneration(generation) {
+        this.$httpWX.post({
+          url: 'relation/searchUser',
+          data: {
+            user1: getStorageSync('current_user'),
+            generation: generation
+          }
+        }).then(res => {
+          this.users = res
+        })
       }
+    },
+    onShow() {
+      this.$httpWX.post({
+        url: 'relation/searchUser',
+        data: {
+          user1: getStorageSync('current_user'),
+          generation: 2
+        }
+      }).then(res => {
+        this.users = res
+      })
     }
   }
 </script>
