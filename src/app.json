@@ -1,0 +1,81 @@
+{
+  "pages": [
+    "pages/login/main",
+    "pages/index/main",
+    "pages/calendar/main",
+    "pages/detail/main",
+    "pages/userPage/main",
+    "pages/familyTree/main",
+    "pages/userInput/main",
+    "pages/userInfo/main",
+    "pages/artifact/main",
+    "pages/addArtifact/main",
+    "pages/addMember/main",
+    "pages/weather/main",
+    "pages/memo/main",
+    "pages/createUser/main",
+    "pages/createFamily/main"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#489B81"
+  },
+  "tabBar": {
+    "position": "bottom",
+    "list": [
+      {
+        "pagePath": "pages/index/main",
+        "text": "用户",
+        "iconPath": "/static/images/5.png",
+        "selectedIconPath": "/static/images/6.png"
+      },
+      {
+        "pagePath": "pages/calendar/main",
+        "text": "日历",
+        "iconPath": "/static/images/7.png",
+        "selectedIconPath": "/static/images/8.png"
+      },
+      {
+        "pagePath": "pages/familyTree/main",
+        "text": "族谱",
+        "iconPath": "/static/images/19.png",
+        "selectedIconPath": "/static/images/20.png"
+      },
+      {
+        "pagePath": "pages/artifact/main",
+        "text": "传家宝",
+        "iconPath": "/static/images/45.png",
+        "selectedIconPath": "/static/images/44.png"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "根据用户当前位置获取实时天气信息"
+    }
+  },
+  "usingComponents": {
+    "van-button": "vant-weapp/dist/button/index",
+    "van-icon": "vant-weapp/dist/icon/index",
+    "van-dialog": "vant-weapp/dist/dialog/index",
+    "van-rate": "vant-weapp/dist/rate/index",
+    "van-tree-select": "vant-weapp/dist/tree-select/index",
+    "van-grid": "vant-weapp/dist/grid/index",
+    "van-grid-item": "vant-weapp/dist/grid-item/index",
+    "van-field": "vant-weapp/dist/field/index",
+    "van-cell-group": "vant-weapp/dist/cell-group/index",
+    "van-cell": "vant-weapp/dist/cell/index",
+    "van-card": "vant-weapp/dist/card/index",
+    "van-toast": "vant-weapp/dist/toast/index",
+    "van-sidebar": "vant-weapp/dist/sidebar/index",
+    "van-sidebar-item": "vant-weapp/dist/sidebar-item/index",
+    "van-divider": "vant-weapp/dist/divider/index",
+    "van-swipe-cell": "vant-weapp/dist/swipe-cell/index",
+    "van-toast": "vant-weapp/dist/toast/index"
+  },
+  "plugins": {
+    "weather": {
+      "version": "1.1.0",
+      "provider": "wx6578a11b90205be3"
+    }
+  }
+}
