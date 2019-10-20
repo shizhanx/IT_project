@@ -21,9 +21,19 @@ class Objects extends CI_Controller
 	 * return: an array of matching records, can be empty if not found.
 	 */
 	public function mysearch($database,$type){
+		if (!isset($_POST['search'])){
+			show_error('You must search something');
+		}
 		$data['data']=$this->Objects_model->mysearch($database,$type);
 		$this->load->view('echo',$data);
 		return $data['data'];
+	}
+
+	public function returnSearch($database,$type){
+		if (!isset($_POST['search'])){
+			show_error('You must search something');
+		}
+		return $this->Objects_model->mysearch($database,$type);
 	}
 
 	/*
@@ -80,8 +90,6 @@ class Objects extends CI_Controller
 				}
 			}
 			$this->Objects_model->myedit($database,$object);
-			$data['data']=$object;
-			$this->load->view('echo',$data);
 			//if editing name, the old object needs to be deleted manually since name is
 			// the primary key. Then edit all the relations accordingly
 			if ($_POST['old_name']!=$_POST['name']){
@@ -96,7 +104,7 @@ class Objects extends CI_Controller
 				}
 			}
 			$_POST['search']=$_POST['name'];
-			return $this->mysearch($database,'exact');
+			$this->mysearch($database,'exact');
 		}
 	}
 

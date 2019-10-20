@@ -8,7 +8,7 @@ class Family extends Objects
 
 	public function search($type)
 	{
-		$_POST['search']='starlight 99';
+		$_POST['search']='s';
 		parent::mysearch($this->database, $type);
 	}
 
@@ -19,6 +19,9 @@ class Family extends Objects
 	 */
 	public function create()
 	{
+//		$_POST['current_user']='haruki';
+//		$_POST['name']='99';
+//		$_POST['description']='new_wives';
 		parent::mycreate($this->database);
 		$info['user']=$_POST['current_user'];
 		$info[$this->database]=$_POST['name'];

@@ -39,4 +39,27 @@ class Event extends Objects
 	{
 		parent::mydelete($this->database,$this->related_table);
 	}
+
+	public function searchAllEvents(){
+		$info=array('user'=>$_POST['current_user']);
+		$allRelations=$this->relation->search('userevent',$info);
+		$results=array();
+		foreach ($allRelations as $relation){
+			$_POST['search']=$relation['event'];
+			$result=parent::returnSearch($this->database,'exact');
+			if (!empty($result)){
+				array_push($results,$result[0]);
+			}
+		}
+		$data['data']=$results;
+		$this->load->view('echo',$data);
+	}
+
+	public function searchFutureEvents(){
+		if (!isset($_POST['today'])){
+			show_error('You must enter the date of today');
+		}
+		$data['data']=$this->Objects_model->searchForward();
+		$this->load->view('echo',$data);
+	}
 }

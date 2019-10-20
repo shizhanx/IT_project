@@ -25,6 +25,21 @@ class Relation extends CI_Controller
 		$this->load->view('echo',$data);
 	}
 
+	/*
+	 * api for front end
+	 * required input:
+	 * $_POST['user1']: the current user
+	 * $_POST['generation']: the generation to search on
+	 */
+	public function searchUser(){
+		if (!isset($_POST['user1']) || !isset($_POST['generation'])){
+			show_error('no enough information POSTed');
+		}
+		$info=array('user1'=>$_POST['user1'],'generation'=>$_POST['generation']);
+		$data['data']=$this->search('userrelation',$info);
+		$this->load->view('echo',$data);
+	}
+
 	public function search($database,$info){
 		return $this->Relation_model->search($database,$info);
 	}
@@ -73,14 +88,15 @@ class Relation extends CI_Controller
 	/*
 	 * api for front end
 	 * required input:
-	 * $database: the name of the relation table
-	 * $_POST['info']: an array of the criteria of rows you trying to delete
+	 * $_POST['user']:
+	 * $_POST['event']:
 	 */
-	public function mydelete($database){
-		if (!isset($_POST['info'])){
+	public function userUnregister(){
+		if (!isset($_POST['user']) || !isset($_POST['event'])){
 			show_error('no enough information POSTed');
 		}
-		$this->delete($database,$_POST['info']);
+		$info=array('user'=>$_POST['user'], 'event'=>$_POST['event']);
+		$this->delete('userevent',$info);
 	}
 
 	public function delete($database,$info){

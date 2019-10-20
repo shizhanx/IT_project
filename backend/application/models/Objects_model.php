@@ -16,7 +16,27 @@ class Objects_model extends CI_Model
 			$this->db->like('name',$_POST['search'],'both');
 			$this->db->or_like('description',$_POST['search'],'both');
 			$query = $this->db->get($database);
+		}elseif ($type=='generation'){
+			if ($database!='user'){
+				show_error('Wrong search method');
+			}else{
+				$this->db->where('generation', $_POST['search']);
+				$query = $this->db->get($database);
+			}
+		}elseif ($type=='date'){
+			if ($database!='event'){
+				show_error('Wrong search method');
+			}else{
+				$this->db->where('date', $_POST['search']);
+				$query = $this->db->get($database);
+			}
 		}
+		return $query->result_array();
+	}
+
+	public function searchForward(){
+		$this->db->where('date >', $_POST['today']);
+		$query=$this->db->get('event');
 		return $query->result_array();
 	}
 
