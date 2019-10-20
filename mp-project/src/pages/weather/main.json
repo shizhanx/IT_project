@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "weather": "plugin://weather/weather"
+  },
+  "navigationBarTitleText": "天气"
+}
+
+
