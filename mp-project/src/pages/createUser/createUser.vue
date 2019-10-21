@@ -7,7 +7,7 @@
     </form>
     <van-divider contentPosition="left">上传图片 最多一张喔~~</van-divider>
     <Upload ref="ch"/>
-    <van-button plain icon="completed" type="primary" @click="onClickSubmit">注册</van-button>
+    <van-button round icon="plus" type="info" @click="onClickSubmit">注册</van-button>
   </div>
 </template>
 

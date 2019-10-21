@@ -5,7 +5,7 @@
       ref="ch"
       hot-search='请搜索传家宝'
     />
-    <van-button plain icon="completed" type="primary" @click="onClickSearch">搜索</van-button>
+    <van-button color="#7232dd" plain round icon="search" size="mini" @click="onClickSearch"></van-button>
     <van-divider />
     <div v-if="searching === '0'">
       <div

@@ -1,10 +1,17 @@
 <template>
     <div class="listContainer">
-      <img :src=user.image alt="">
+      <div class="avatar-wrapper" @click="onClickUser(current_user.name)">
+        <ImageView
+          :src=user.image
+          round
+          height="100%"
+          mode="scaleToFill"
+        />
+      </div>
       <div>
         <div class="tmpContainer">
-          <p class="company">{{user.name}}</p>
-          <p class="content">{{user.description}}</p>
+          <div class="company"><van-tag color="#000000" size="large">{{user.name}}</van-tag></div>
+          <div class="content"><van-tag color="#99FFFF" text-color="#009FCC">{{user.description}}</van-tag></div>
           <van-divider contentPosition="left">参与活动</van-divider>
           <div v-for="(event, index) in registered_events" :key="index">
             <div @click="onClickEvent(event)">
@@ -13,6 +20,9 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="add">
+        <van-tag round size="large" color="#007799" text-color="#DDDDDD" @click="toFamilyTreeClick">返回族谱</van-tag>
       </div>
     </div>
 </template>
@@ -34,6 +44,11 @@
       onClickEvent (event) {
         setStorageSync('current_event', event)
         this.$router.push({path: '/pages/eventDetail/main'})
+      },
+      toFamilyTreeClick () {
+        wx.switchTab({
+          url: '/pages/familyTree/main'
+        })
       }
     },
     onShow() {
@@ -125,5 +140,14 @@
     position: fixed;
     right: 20px;
     bottom: 20px;
+  }
+  .avatar-wrapper {
+    width: 200px;
+    height: 200px;
+  }
+  .add {
+    position: fixed;
+    right: -2px;
+    top: 50px;
   }
 </style>

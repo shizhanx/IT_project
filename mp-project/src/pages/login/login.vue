@@ -1,23 +1,40 @@
 <template>
   <div>
     <div v-if="exist === '1'">
-      <p>欢迎回来, {{name}}</p>
-      <p>{{description}}</p>
-      <van-button plain icon="completed" type="primary" @click="onCreateFamilyClick">新建家族</van-button>
-      <van-button plain icon="completed" type="primary" @click="refreshFamily">刷新家族</van-button>
+      <van-tag type="primary" size="large">欢迎回来, 亲爱的{{name}}~~</van-tag>
+      <div class="description">
+        <p>简介：</p>
+        <van-tag mark type="warning" size="large">{{description}}</van-tag>
+      </div>
+      <div>
+        <van-divider />
+          <div class="newfamily">
+            <van-button round icon="plus" type="primary" @click="onCreateFamilyClick">新建家族</van-button>
+          </div>
+        <van-divider contentPosition="left">点击进入家庭~</van-divider>
+      </div>
       <div
         v-for="(family,i) in families"
         :key="i"
         @click='onClickFamily(family.family)'
-      >{{family.family}}</div>
+        class="familyList"
+      >
+        <van-tag color="#99BBFF" type="primary" size="large">{{family.family}}</van-tag>
+      </div>
+      <div class="refresh">
+        <van-button icon="replay" type="info" @click="refreshFamily">刷新</van-button>
+      </div>
     </div>
     <div v-if="exist === '0'">
       <van-divider contentPosition="left">文字描述</van-divider>
       <form class="form-container">
         <input type="text" class="form-control" v-model.lazy="name" placeholder="请输入用户名"/>
       </form>
-      <van-button plain icon="completed" type="primary" @click="onClickSubmit">提交</van-button>
-      <van-button plain icon="completed" type="primary" @click="onCreateUserClick">新建用户</van-button>
+      <van-divider />
+      <van-button round icon="success" type="primary" @click="onClickSubmit">提交</van-button>
+      <div class="new">
+        <van-button round icon="plus" type="info" @click="onCreateUserClick">新用户注册</van-button>
+      </div>
     </div>
   </div>
 </template>
@@ -82,7 +99,6 @@
         }).then(res => {
           setStorageSync('current_family', res[0])
         })
-        // this.$router.replace({path: '/pages/index/main'})
         wx.switchTab({
           url: '/pages/index/main'
         })
@@ -98,5 +114,20 @@
     margin-bottom: 5px;
     height: 10px;
     border: 1px solid #ccc;
+  }
+  .new {
+    position: absolute;
+    left: 108px;
+    top: 158px;
+  }
+  .description {
+    position: relative;
+    left:0;
+    top: 5px;
+  }
+  .refresh {
+    position: absolute;
+    left: 160px;
+    top: 120px;
   }
 </style>

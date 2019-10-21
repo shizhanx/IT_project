@@ -5,7 +5,6 @@
       <input type="text" class="form-control" v-model.lazy="name" placeholder="家族名称"/>
       <input type="text" class="form-control" v-model.lazy="description" placeholder="描述"/>
     </form>
-    <van-divider contentPosition="left">上传图片 最多一张喔~~</van-divider>
     <div>{{current_user}}</div>
     <van-button plain icon="completed" type="primary" @click="onClickSubmit">新建</van-button>
   </div>

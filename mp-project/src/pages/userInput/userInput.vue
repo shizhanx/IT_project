@@ -1,5 +1,6 @@
 <template>
   <div>
+    <van-divider contentPosition="left">文字描述</van-divider>
     <form class="form-container">
       <input type="text" class="form-control" v-model.lazy="name" placeholder="标题" />
       <input type="text" class="form-control" v-model.lazy="description" placeholder="详情" />
@@ -46,6 +47,11 @@
           }
         })
       }
+    },
+    onUnload() {
+      this.name = ''
+      this.description = ''
+      this.$refs.ch.urls = []
     }
   }
 </script>
@@ -53,7 +59,7 @@
 <style>
   .form-control {
     display: block;
-    padding: 0 12px;
+    padding: 12px 12px;
     margin-bottom: 5px;
     height: 10px;
     border: 1px solid #ccc;

@@ -1,10 +1,10 @@
 {
   "pages": [
     "pages/login/main",
+    "pages/userDetail/main",
     "pages/index/main",
     "pages/familyTree/main",
     "pages/eventDetail/main",
-    "pages/userDetail/main",
     "pages/allEvents/main",
     "pages/familyInfo/main",
     "pages/userInfo/main",
@@ -18,7 +18,8 @@
     "pages/weather/main",
     "pages/memo/main",
     "pages/createUser/main",
-    "pages/createFamily/main"
+    "pages/createFamily/main",
+    "pages/whisper/main"
   ],
   "window": {
     "navigationBarBackgroundColor": "#489B81"
@@ -58,6 +59,7 @@
     }
   },
   "usingComponents": {
+    "van-notice-bar": "vant-weapp/dist/notice-bar/index",
     "van-tag": "vant-weapp/dist/tag/index",
     "van-button": "vant-weapp/dist/button/index",
     "van-icon": "vant-weapp/dist/icon/index",
@@ -75,12 +77,18 @@
     "van-sidebar-item": "vant-weapp/dist/sidebar-item/index",
     "van-divider": "vant-weapp/dist/divider/index",
     "van-swipe-cell": "vant-weapp/dist/swipe-cell/index",
-    "van-toast": "vant-weapp/dist/toast/index"
+    "van-toast": "vant-weapp/dist/toast/index",
+    "van-radio": "vant-weapp/dist/radio/index",
+    "van-radio-group": "vant-weapp/dist/radio-group/index"
   },
   "plugins": {
     "weather": {
       "version": "1.1.0",
       "provider": "wx6578a11b90205be3"
+    },
+    "routePlan": {
+      "version": "1.0.1",
+      "provider": "wx50b5593e81dd937a"
     }
   }
 }

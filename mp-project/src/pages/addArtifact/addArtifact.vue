@@ -5,11 +5,9 @@
       <input type="text" class="form-control" v-model.lazy="name" placeholder="取个名吧！" />
       <input type="text" class="form-control" v-model.lazy="description" placeholder="介绍一下" />
     </form>
-    <p>名字: {{ name }}</p>
-    <p>介绍: {{ description }}</p>
     <van-divider contentPosition="left">上传图片 最多一张喔~~</van-divider>
     <Upload ref="ch"/>
-    <van-button plain icon="completed" type="primary" @click="onClickSubmit">提交</van-button>
+    <van-button plain icon="upgrade" type="primary" @click="onClickSubmit">提交</van-button>
   </div>
 </template>
 
@@ -47,6 +45,11 @@
           }
         })
       }
+    },
+    onUnload() {
+      this.name = ''
+      this.description = ''
+      this.$refs.ch.urls = []
     }
   }
 </script>

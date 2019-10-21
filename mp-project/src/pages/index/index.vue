@@ -1,11 +1,21 @@
 <template>
   <div>
+    <div v-if="announce.length !== 0">
+      <van-notice-bar
+        mode="closeable"
+        :text="current_user.name+'说： '+announce"
+      />
+    </div>
+    <van-divider />
+    <div class="joinTag">
+      <van-tag mark color="#ffe1e1" text-color="#ad0000">我参与的活动</van-tag>
+    </div>
     <div class="home">
       <div class="personalInfo">
-        <van-button round type="info" @click="toUserInfoClick">修改个人信息</van-button>
+        <van-button round color="linear-gradient(to right, #4bb0ff, #6149f6)"@click="toUserInfoClick">修改个人信息</van-button>
       </div>
       <div class="familyInfo">
-        <van-button round type="info" @click="toFamilyInfoClick">修改家族信息</van-button>
+        <van-button round color="linear-gradient(to right, #FF88C2, #8C0044)" @click="toFamilyInfoClick">修改家族信息</van-button>
       </div>
       <div class="home-card">
         <div class="home-card-inner">
@@ -28,7 +38,7 @@
               <ImageView
                 :src=recent_event.image
               />
-              <div>{{recent_event.name}}</div>
+              <div class="titleTag"><van-tag round color="#B088FF">{{recent_event.name}}</van-tag></div>
             </div>
             <div class="shelf-wrapper">
               <div class="shelf" @click="onClickAll">全部</div>
@@ -44,19 +54,22 @@
         </div>
       </div>
       <van-divider />
-      <van-grid>
-        <van-grid-item icon="notes-o" text="备忘录" @click="onMemoClick"/>
-        <van-grid-item icon="https://www.easyicon.net/api/resizeApi.php?id=1221640&size=128" text="天气" @click="onWeatherClick"/>
-        <van-grid-item icon="diamond-o" text="家族座右铭" url="https://www.baidu.com/"/>
-        <van-grid-item icon="like-o" text="悄悄话" />
-      </van-grid>
+      <div class="usefulTag"><van-tag mark color="#77DDFF" text-color="#0066FF">常用功能</van-tag></div>
+      <div class="useful">
+        <van-grid>
+          <van-grid-item icon="bullhorn-o" text="发布通告" @click="onMemoClick"/>
+          <van-grid-item icon="https://www.easyicon.net/api/resizeApi.php?id=1221640&size=128" text="天气" @click="onWeatherClick"/>
+          <van-grid-item icon="https://www.easyicon.net/api/resizeApi.php?id=1233422&size=128" text="地图" url="https://www.baidu.com/"/>
+          <van-grid-item icon="like-o" text="悄悄话" @click="onWhisperClick"/>
+        </van-grid>
+      </div>
       <van-divider />
       <div v-if="have_future_events==='0'">没有计划开展的活动</div>
       <div v-if="have_future_events==='1'">
-        <div>未来计划开展的活动</div>
+        <div class="futuretag"><van-tag mark color="#FFFFBB" text-color="#FF5511">未来计划开展的活动</van-tag></div>
         <swiper indicator-dots indicator-color="pink" indicator-active-color="green">
           <swiper-item v-for="(event,i) in future_events" :key="i" @click="onClickEvent(event)">
-            <div>{{event.name}}</div>
+            <div class="imageTag"><van-tag round size="large" color="#B088FF">{{event.name}}</van-tag></div>
             <img :src="event.image" alt="">
           </swiper-item>
         </swiper>
@@ -81,7 +94,8 @@
         total_events: 0,
         recent_event: {},
         future_events: {},
-        have_future_events: '0'
+        have_future_events: '0',
+        announce: getStorageSync('announcment')
       }
     },
     computed: {
@@ -92,6 +106,9 @@
     methods: {
       onMemoClick() {
         this.$router.push({path: '/pages/memo/main'})
+      },
+      onWhisperClick() {
+        this.$router.push({path: '/pages/whisper/main'})
       },
       onWeatherClick() {
         this.$router.push({path: '/pages/weather/main'})
@@ -127,6 +144,7 @@
       }
     },
     onShow() {
+      this.announce = getStorageSync('announcment')
       var eventName
       this.$httpWX.post({
         url: 'relation/mysearch/userevent',
@@ -168,17 +186,38 @@
 </script>
 
 <style lang="scss" scoped>
+  .futuretag {
+    margin-top: -10px;
+  }
+  .joinTag {
+    margin-top: -10px;
+    margin-bottom: -10px;
+  }
   .home {
+    .usefulTag {
+      margin-top: -10px;
+    }
+    .imageTag {
+      margin-top: 10px;
+      margin-bottom: 4px;
+      margin-left: 140px;
+    }
+    .useful {
+      margin-top: 10px;
+    }
     .personalInfo {
       z-index: 1000;
-      position: relative;
-      right: -220px;
-      top: 10px;
+      opacity:0.6;
+      position: fixed;
+      right: 10px;
+      bottom: 70px;
     }
     .familyInfo {
-      position: relative;
-      right: -20px;
-      top: -40px;
+      z-index: 1000;
+      opacity:0.5;
+      position: fixed;
+      right: 10px;
+      bottom: 10px;
     }
     .home-banner {
       margin-top: 20px;
@@ -221,8 +260,8 @@
           display: flex;
           align-items: center;
           .avatar-wrapper {
-            width: 20px;
-            height: 20px;
+            width: 40px;
+            height: 40px;
           }
           .nickname, .shelf-text {
             font-size: 12px;
@@ -246,6 +285,9 @@
             flex: 1;
             display: flex;
             justify-content: space-around;
+            .titleTag {
+              margin-left: -50px;
+            }
             .book-img-wrapper {
               width: 72px;
               height: 101px;
